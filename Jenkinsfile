@@ -1,13 +1,17 @@
 def aws_region_var = ''
+def environment = ''
 
 if(env.BRANCH_NAME ==~ "dev.*"){
     aws_region_var = "us-east-1"
+    environment = 'dev'
 }
 else if(env.BRANCH_NAME ==~ "qa.*"){
     aws_region_var = "us-east-2"
+    environment = 'qa'
 }
 else if(env.BRANCH_NAME ==~ "master"){
     aws_region_var = "us-west-2"
+    environment = 'prod'
 }
 
 println(env.BRANCH_NAME)
@@ -36,7 +40,7 @@ node {
                 build job: 'terraform-ec2-by-ami-name', parameters: [
                     booleanParam(name: 'terraform_apply', value: true),
                     booleanParam(name: 'terraform_destroy', value: false),
-                    string(name: 'environment', value: "${env.BRANCH_NAME}"),
+                    string(name: 'environment', value: "${environment}"),
                     string(name: 'ami_name', value: "${ami_name}")
                     ]
             }
