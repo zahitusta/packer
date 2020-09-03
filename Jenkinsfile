@@ -10,6 +10,9 @@ else if(env.BRANCH_NAME == "^master$"){
     aws_region_var = "us-west-2"
 }
 
+println(env.BRANCH_NAME)
+println(aws_region_var)
+
 node {
     stage('Pull Repo') {
         checkout scm
@@ -27,5 +30,4 @@ node {
         }  
     }
 }
-
 
