@@ -29,18 +29,17 @@ node {
 
             def ami_id = ''
             stage('Packer Build') {
-                // sh 'packer build apache.json | tee output.txt'
+                sh 'packer build apache.json | tee output.txt'
 
-                // ami_id = sh(script: 'cat output.txt | grep us-east-2 | awk \'{print $2}\'', returnStdout: true)
-                // println(ami_id)
-                ami_id = "ami-041ebe96a830c8b98"
+                ami_id = sh(script: 'cat output.txt | grep us-east-2 | awk \'{print $2}\'', returnStdout: true)
+                println(ami_id)
             }
 
             stage('Create EC2 Instance'){
                 build job: 'terraform-ec2', parameters: [
                     booleanParam(name: 'terraform_apply', value: true),
                     booleanParam(name: 'terraform_destroy', value: false),
-                    string(name: 'environment', value: "${params.environment}"),
+                    string(name: 'environment', value: "${environment}"),
                     string(name: 'ami_id', value: "${ami_id}")
                     ]
             }
