@@ -1,5 +1,5 @@
 node('worker1'){
-    stage(){
+    stage("Pull repo"){
         sh '''
             ls
         '''
